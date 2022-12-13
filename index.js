@@ -21,15 +21,15 @@ app.post('/ai', async (req, res) => {
   //const aiResponse = await getOpenAIResponse(aiQuery);
   //const message = '```' + stripNewLines(aiResponse.text) + '```';
   //get the current date and time as a string
-  // if (
-  //   req.body.event.type === 'app_mention' ||
-  //   (req.body.event.channel_type === 'im' && req.body.event.type === 'message')
-  // ) {
-  //   const dt = new Date().toLocaleString();
-  //   await sendSlackMessage(req.body.event.channel, dt);
-  // } else {
-  //   await sendSlackMessage(req.body.event.channel, 'dinosaur noises....');
-  // }
+  if (
+    req.body.event.type === 'app_mention' ||
+    (req.body.event.channel_type === 'im' && req.body.event.type === 'message')
+  ) {
+    const dt = new Date().toLocaleString();
+    await sendSlackMessage(req.body.event.channel, dt);
+  } else {
+    await sendSlackMessage(req.body.event.channel, 'dinosaur noises....');
+  }
 
   res.json({ hello: 'world' });
 });
