@@ -19,7 +19,7 @@ app.post('/ai', async (req, res) => {
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   await sendSlackMessage(req.body.event.channel, message);
 
-  res.json({ hello: 'world' });
+  res.sendStatus(200);
 });
 
 // Start the server on port 3000
