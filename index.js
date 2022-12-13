@@ -14,6 +14,10 @@ const PORT = process.env.PORT || 3000;
 app.post('/ai', async (req, res) => {
   // Log the request body to the console
 
+  console.log('-------------------------------------------------');
+  console.log(req.body);
+  console.log('-------------------------------------------------');
+
   const aiQuery = removeBracketText(req.body.event.text);
   const aiResponse = await getOpenAIResponse(aiQuery);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
