@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { sendSlackMessage } = require('./slack');
 const { getOpenAIResponse } = require('./ai');
-const { stripNewLines } = require('./lib');
+const { stripNewLines, removeBracketText } = require('./lib');
 
 // Create an express app
 const app = express();
@@ -11,12 +11,14 @@ app.use(bodyParser.json());
 const PORT = process.env.PORT || 3000;
 
 // Create an endpoint for the 'ai' route
-app.post('/ai', (req, res) => {
+app.post('/ai', async (req, res) => {
   // Log the request body to the console
   console.log('YAY! I got a request!', req.body.event);
 
-  // Send a slack message to the same channel in req.body
-  sendSlackMessage(req.body.event.channel, 'Hello 2.0 from the server!');
+  const aiQuery = removeBracketText(req.body.event.text);
+  const aiResponse = await getOpenAIResponse(aiQuery);
+  const message = '```' + stripNewLines(aiResponse.text) + '```';
+  await sendSlackMessage(req.body.event.channel, message);
 
   res.json({ hello: 'world' });
 });

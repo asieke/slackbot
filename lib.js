@@ -11,3 +11,7 @@ module.exports.stripNewLines = (text) => {
   //return the text
   return text;
 };
+
+module.exports.removeBracketText = (str) => {
+  return str.replace(/<[^>]*>/g, '');
+};
