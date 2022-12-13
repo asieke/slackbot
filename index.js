@@ -33,9 +33,6 @@ app.listen(PORT, () => {
 });
 
 const sendSlackMessage = (CHANNEL_ID, MESSAGE_TEXT) => {
-  console.log('sending....', CHANNEL_ID, MESSAGE_TEXT);
-
-  /*
   var headers = {
     Authorization: 'Bearer ' + SLACK_KEY,
   };
@@ -49,10 +46,9 @@ const sendSlackMessage = (CHANNEL_ID, MESSAGE_TEXT) => {
     .post('https://slack.com/api/chat.postMessage', body, { headers: headers })
     .then((response) => {
       //console log the response
-      console.log('Message sent!!!', response);
+      console.log('Message sent!!!');
     })
     .catch((error) => {
       console.log('Error sending message', error);
     });
-    */
 };
