@@ -16,7 +16,7 @@ app.post('/ai', (req, res) => {
   console.log('YAY! I got a request!', req.body);
 
   // Send a slack message to the same channel in req.body
-  sendSlackMessage(req.body.channel, 'Hello from the server!');
+  sendSlackMessage(req.body.event.channel, 'Hello from the server!');
 
   res.json({ hello: 'world' });
 });
