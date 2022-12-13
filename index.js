@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
+const PORT = process.env.PORT || 3000;
+
 // Create an endpoint for the 'ai' route
 app.post('/ai', (req, res) => {
   // Log the request body to the console
@@ -18,6 +20,6 @@ app.get('/ai', (req, res) => {
 });
 
 // Start the server on port 3000
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log('Server listening on port 3000');
 });
