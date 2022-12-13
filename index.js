@@ -32,18 +32,22 @@ app.listen(PORT, () => {
 });
 
 const sendSlackMessage = (CHANNEL_ID, MESSAGE_TEXT) => {
-  const payload = {
-    token: KEY,
-    channel: CHANNEL_ID,
+  var headers = {
+    Authorization: 'Bearer ' + KEY,
+    'Content-Type': 'application/json',
+  };
+  var body = {
+    channel: CHANNEL_ID, // Slack user or channel, where you want to send the message
     text: MESSAGE_TEXT,
   };
 
+  // post a message using axios and the slack api
   axios
-    .post('https://slack.com/api/chat.postMessage', payload)
+    .post('https://slack.com/api/chat.postMessage', body, { headers: headers })
     .then((response) => {
-      console.log(response.data);
+      console.log('Message sent successfully');
     })
     .catch((error) => {
-      console.error(error);
+      console.log('Error sending message', error);
     });
 };
