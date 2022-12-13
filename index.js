@@ -13,14 +13,14 @@ const PORT = process.env.PORT || 3000;
 // Create an endpoint for the 'ai' route
 app.post('/ai', async (req, res) => {
   // Log the request body to the console
-  console.log('YAY! I got a request!', req.body.event);
+  console.log('YAY! I got a request!', req.body.event.text);
 
   const aiQuery = removeBracketText(req.body.event.text);
   const aiResponse = await getOpenAIResponse(aiQuery);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   await sendSlackMessage(req.body.event.channel, message);
 
-  res.json({ hello: 'world' });
+  res.json({ aiResponse });
 });
 
 // Start the server on port 3000
