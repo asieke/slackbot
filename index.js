@@ -36,10 +36,10 @@ const sendSlackMessage = (CHANNEL_ID, MESSAGE_TEXT) => {
     Authorization: 'Bearer ' + KEY,
     'Content-Type': 'application/json',
   };
-  var body = {
+  var body = JSON.stringify({
     channel: CHANNEL_ID, // Slack user or channel, where you want to send the message
     text: MESSAGE_TEXT,
-  };
+  });
 
   // post a message using axios and the slack api
   axios
