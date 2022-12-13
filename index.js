@@ -14,22 +14,10 @@ const PORT = process.env.PORT || 3000;
 app.post('/ai', async (req, res) => {
   // Log the request body to the console
 
-  //const aiQuery = removeBracketText(req.body.event.text);
-  //const aiResponse = await getOpenAIResponse(aiQuery);
-  //const message = '```' + stripNewLines(aiResponse.text) + '```';
-  //get the current date and time as a string
-
-  await sendSlackMessage(req.body.event.channel, JSON.stringify(req.body.event));
-
-  // if (
-  //   req.body.event.type === 'app_mention' ||
-  //   (req.body.event.channel_type === 'im' && req.body.event.type === 'message')
-  // ) {
-  //   const dt = new Date().toLocaleString();
-  //   await sendSlackMessage(req.body.event.channel, dt);
-  // } else {
-  //   await sendSlackMessage(req.body.event.channel, 'dinosaur noises....');
-  // }
+  const aiQuery = removeBracketText(req.body.event.text);
+  const aiResponse = await getOpenAIResponse(aiQuery);
+  const message = '```' + stripNewLines(aiResponse.text) + '```';
+  await sendSlackMessage(req.body.event.channel, message);
 
   res.json({ hello: 'world' });
 });
