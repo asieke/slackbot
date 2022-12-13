@@ -23,20 +23,6 @@ app.post('/ai', async (req, res) => {
   res.json({ hello: 'world' });
 });
 
-// create a get endpoint for the 'ai' route
-app.get('/ai', async (req, res) => {
-  // return a json object with the request body
-
-  const data = await getOpenAIResponse(
-    'give me 5 sweet nickname ideas if I was an NHL hockey player'
-  );
-  const message = '```' + stripNewLines(data.text) + '```';
-
-  await sendSlackMessage('C04F9JW7BLH', message);
-  console.log(data);
-  res.json(data);
-});
-
 // Start the server on port 3000
 app.listen(PORT, () => {
   console.log('Server listening on port 3000');
