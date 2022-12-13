@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Create an endpoint for the 'ai' route
 app.post('/ai', (req, res) => {
   // Log the request body to the console
-  console.log('HELLO THERE HOW ARE YOU', req.body);
+  res.json({ challenge: req.body.challenge });
 });
 
 // create a get endpoint for the 'ai' route
