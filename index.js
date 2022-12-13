@@ -23,6 +23,7 @@ app.post('/ai', async (req, res) => {
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   await sendSlackMessage(req.body.event.channel, message);
 
+  res.set('X-Slack-No-Retry', '1');
   res.sendStatus(200);
 });
 
