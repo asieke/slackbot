@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-const KEY = 'xoxb-2544746774-4518443850993-AKOrDbLVEcnUEu0BVK7aE5Wu';
+const KEY = 'xoxb-2544746774-4518443850993-6JCJ988D0dR3ZiA1OykEHhS6';
 
 // Create an express app
 const app = express();
@@ -34,18 +34,18 @@ app.listen(PORT, () => {
 const sendSlackMessage = (CHANNEL_ID, MESSAGE_TEXT) => {
   var headers = {
     Authorization: 'Bearer ' + KEY,
-    'Content-Type': 'application/json',
   };
-  var body = JSON.stringify({
+  var body = {
     channel: CHANNEL_ID, // Slack user or channel, where you want to send the message
     text: MESSAGE_TEXT,
-  });
+  };
 
   // post a message using axios and the slack api
   axios
     .post('https://slack.com/api/chat.postMessage', body, { headers: headers })
     .then((response) => {
-      console.log('Message sent successfully');
+      //console log the response
+      console.log('Message sent!!!', response);
     })
     .catch((error) => {
       console.log('Error sending message', error);
