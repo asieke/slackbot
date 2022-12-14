@@ -15,16 +15,16 @@ app.post('/ai', async (req, res) => {
   // Log the request body to the console
 
   console.log('-------------------------------------------------');
-  console.log(req.body);
+  console.log(req.body.event);
   console.log('-------------------------------------------------');
+
+  res.set('X-Slack-No-Retry', '1');
+  res.sendStatus(200);
 
   const aiQuery = removeBracketText(req.body.event.text);
   const aiResponse = await getOpenAIResponse(aiQuery);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   await sendSlackMessage(req.body.event.channel, message);
-
-  res.set('X-Slack-No-Retry', '1');
-  res.sendStatus(200);
 });
 
 // Start the server on port 3000
