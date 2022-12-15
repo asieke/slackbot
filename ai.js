@@ -2,7 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 const { Configuration, OpenAIApi } = require('openai');
 
-const getOpenAIResponse = async (prompt) => {
+module.exports.getOpenAIResponse = async (prompt) => {
   const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   });
