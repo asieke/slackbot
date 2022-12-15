@@ -25,7 +25,13 @@ app.post('/ai', async (req, res) => {
   const aiResponse = await getOpenAIResponse(aiQuery);
   console.log(aiResponse);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
-  await sendSlackMessage(req.body.event.channel, message);
+  try {
+    await sendSlackMessage(req.body.event.channel, message);
+    console.log('sent message: ' + message);
+  } catch (err) {
+    console.log(err);
+  }
+
   console.log('-------------------------------------------------');
 });
 
