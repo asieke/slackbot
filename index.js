@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { sendSlackMessage, getMessages } = require('./slack');
-const { getOpenAIResponse, messageToJSON } = require('./ai');
+const { getOpenAIResponse } = require('./ai');
 const { stripNewLines, removeBracketText } = require('./lib');
 
 // Create an express app
@@ -16,15 +16,17 @@ app.post('/ai', async (req, res) => {
 
   console.log('-------------------------------------------------');
   console.log(req.body.event);
-  console.log('-------------------------------------------------');
 
   res.set('X-Slack-No-Retry', '1');
   res.sendStatus(200);
 
   const aiQuery = await getMessages(req.body.event.channel);
+  console.log(aiQuery);
   const aiResponse = await getOpenAIResponse(aiQuery);
+  console.log(aiResponse);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   await sendSlackMessage(req.body.event.channel, message);
+  console.log('-------------------------------------------------');
 });
 
 app.get('/ai', async (req, res) => {
