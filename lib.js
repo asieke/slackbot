@@ -8,6 +8,14 @@ module.exports.stripNewLines = (text) => {
   if (text.charAt(text.length - 1) === '\n') {
     text = text.substring(0, text.length - 1);
   }
+
+  text = text.trim();
+
+  // if the text begins with "ada:" then remove it
+  if (text.substring(0, 4) === 'ava:') {
+    text = text.substring(5);
+  }
+
   //return the text
   return text;
 };

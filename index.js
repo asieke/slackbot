@@ -22,7 +22,7 @@ app.post('/ai', async (req, res) => {
 
   const aiQuery = await getMessages(req.body.event.channel);
   console.log(aiQuery);
-  const aiResponse = await getOpenAIResponse(aiQuery);
+  let aiResponse = await getOpenAIResponse(aiQuery);
   console.log(aiResponse);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   try {
