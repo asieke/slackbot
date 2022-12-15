@@ -19,18 +19,19 @@ module.exports.sendSlackMessage = async (CHANNEL_ID, MESSAGE_TEXT) => {
 //get the last N messages from a slack channel
 module.exports.getMessages = async (channel) => {
   const res = await axios.get(
-    `https://slack.com/api/conversations.history?channel=${channel}&limit=5&pretty=1`,
+    `https://slack.com/api/conversations.history?channel=${channel}&limit=10&pretty=1`,
     {
       headers: {
         Authorization: 'Bearer ' + SLACK_BOT_KEY,
       },
     }
   );
+
   let text =
     'You are an AI named Ava having a conversation with Erik, Alex, Sam, Solon, and Schuyler\n';
   for (let i = res.data.messages.length - 1; i >= 0; i--) {
     text += (await getName(res.data.messages[i].user)) + ': \n';
-    text += res.data.messages[i].text + '\n';
+    text += res.data.messages[i].text.replace(/```/g, '') + '\n';
   }
   text += 'please respond to the last message including the context of the previous messages\n';
 
