@@ -21,7 +21,7 @@ app.post('/ai', async (req, res) => {
   res.set('X-Slack-No-Retry', '1');
   res.sendStatus(200);
 
-  const aiQuery = getMessages(req.body.event.channel);
+  const aiQuery = await getMessages(req.body.event.channel);
   const aiResponse = await getOpenAIResponse(aiQuery);
   const message = '```' + stripNewLines(aiResponse.text) + '```';
   await sendSlackMessage(req.body.event.channel, message);
