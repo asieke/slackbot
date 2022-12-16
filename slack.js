@@ -2,6 +2,16 @@ require('dotenv').config();
 const axios = require('axios');
 const SLACK_BOT_KEY = process.env.SLACK_BOT_KEY;
 
+const users = {
+  '': 'Erik',
+  U02G0MYNY: 'Sam Dodson',
+  U02G798BA: 'Alex Sieke',
+  U02G8Q66U: 'Schuyler Laird',
+  U02G8SNVD: 'Erik Anderson',
+  U02GDKVGQ: 'Solon Aposhian',
+  U04F8D1R0V7: 'Ava',
+};
+
 //send a slack message using the slack api
 module.exports.sendSlackMessage = async (CHANNEL_ID, MESSAGE_TEXT) => {
   var headers = {
@@ -19,7 +29,7 @@ module.exports.sendSlackMessage = async (CHANNEL_ID, MESSAGE_TEXT) => {
 //get the last N messages from a slack channel
 module.exports.getMessages = async (channel) => {
   const res = await axios.get(
-    `https://slack.com/api/conversations.history?channel=${channel}&limit=10&pretty=1`,
+    `https://slack.com/api/conversations.history?channel=${channel}&limit=20&pretty=1`,
     {
       headers: {
         Authorization: 'Bearer ' + SLACK_BOT_KEY,
@@ -27,22 +37,31 @@ module.exports.getMessages = async (channel) => {
     }
   );
 
-  let text =
-    'You are an AI named Ava having a conversation with Erik, Alex, Sam, Solon, and Schuyler\n';
+  const out = [];
   for (let i = res.data.messages.length - 1; i >= 0; i--) {
-    text += (await getName(res.data.messages[i].user)) + ': \n';
-    text += res.data.messages[i].text.replace(/```/g, '') + '\n';
+    //set a variable called text that replaces ``` with nothing
+    const text = stripNewLines(replaceUserIDs(res.data.messages[i].text.replace(/```/g, '')));
+    const user = users[res.data.messages[i].user];
+    out.push({ text, user });
   }
-  text += 'please respond to the last message including the context of the previous messages\n';
 
+  return out;
+};
+
+//write a function that takes a string, if it finds the pattern <@USER_ID> replace it with users[USER_ID]
+const replaceUserIDs = (text) => {
+  const matches = text.match(/<@.*?>/g);
+  if (matches) {
+    for (let i = 0; i < matches.length; i++) {
+      const userID = matches[i].replace(/<|@|>/g, '');
+      const name = users[userID];
+      text = text.replace(matches[i], name);
+    }
+  }
   return text;
 };
 
-const getName = async (userID) => {
-  const res = await axios.get(`https://slack.com/api/users.profile.get?user=${userID}&pretty=1`, {
-    headers: {
-      Authorization: 'Bearer ' + SLACK_BOT_KEY,
-    },
-  });
-  return res.data.profile.real_name;
+//trim any newlines from the beginning or end of a string, but not the middle of the string
+const stripNewLines = (text) => {
+  return text.replace(/^\n+|\n+$/g, '');
 };

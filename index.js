@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { sendSlackMessage, getMessages } = require('./slack');
-const { getOpenAIResponse } = require('./ai');
+const { getOpenAIResponse, generatePrompt } = require('./ai');
 const { stripNewLines, removeBracketText } = require('./lib');
 
 // Create an express app
@@ -20,14 +20,15 @@ app.post('/ai', async (req, res) => {
   res.set('X-Slack-No-Retry', '1');
   res.sendStatus(200);
 
-  const aiQuery = await getMessages(req.body.event.channel);
-  console.log(aiQuery);
-  let aiResponse = await getOpenAIResponse(aiQuery);
+  const slackHistory = await getMessages(req.body.event.channel);
+  const aiPrompt = generatePrompt(slackHistory);
+  console.log(aiPrompt);
+  const aiResponse = await getOpenAIResponse(aiQuery);
   console.log(aiResponse);
-  const message = '```' + stripNewLines(aiResponse.text) + '```';
+  const slackMessage = '```' + stripNewLines(aiResponse.text) + '```';
   try {
-    await sendSlackMessage(req.body.event.channel, message);
-    console.log('sent message: ' + message);
+    await sendSlackMessage(req.body.event.channel, slackMessage);
+    console.log('sent message');
   } catch (err) {
     console.log(err);
   }
@@ -38,12 +39,13 @@ app.post('/ai', async (req, res) => {
 app.get('/ai', async (req, res) => {
   // parse a query param 'text' from the query
   /*call the slack messages API and get the text of the last json.numberOfPreviousMessagesToInclude messages*/
-  const messages = await getMessages('C04E7U76C8L');
+  const slackHistory = await getMessages('C04E7U76C8L');
+  const aiPrompt = generatePrompt(slackHistory);
 
   console.log('trying to fetch messages');
 
   // send the response as plain text
-  res.send(messages);
+  res.send('<pre>' + aiPrompt + '</pre>');
 });
 
 // Start the server on port 3000
