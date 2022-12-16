@@ -23,7 +23,7 @@ app.post('/ai', async (req, res) => {
   const slackHistory = await getMessages(req.body.event.channel);
   const aiPrompt = generatePrompt(slackHistory);
   console.log(aiPrompt);
-  const aiResponse = await getOpenAIResponse(aiQuery);
+  const aiResponse = await getOpenAIResponse(aiPrompt);
   console.log(aiResponse);
   const slackMessage = '```' + stripNewLines(aiResponse.text) + '```';
   try {
