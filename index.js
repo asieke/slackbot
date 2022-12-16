@@ -39,7 +39,7 @@ app.post('/ai', async (req, res) => {
 app.get('/ai', async (req, res) => {
   // parse a query param 'text' from the query
   /*call the slack messages API and get the text of the last json.numberOfPreviousMessagesToInclude messages*/
-  const slackHistory = await getMessages('C04E7U76C8L');
+  const slackHistory = await getMessages('C04F9JW7BLH');
   const aiPrompt = generatePrompt(slackHistory);
 
   console.log('trying to fetch messages');

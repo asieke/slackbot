@@ -28,8 +28,11 @@ module.exports.sendSlackMessage = async (CHANNEL_ID, MESSAGE_TEXT) => {
 
 //get the last N messages from a slack channel
 module.exports.getMessages = async (channel) => {
+  //create a ts that is the timestamp from 20 minutes ago
+  const ts = Math.floor(Date.now() / 1000) - 60 * 20;
+
   const res = await axios.get(
-    `https://slack.com/api/conversations.history?channel=${channel}&limit=20&pretty=1`,
+    `https://slack.com/api/conversations.history?channel=${channel}&limit=20&oldest=${ts}&pretty=1`,
     {
       headers: {
         Authorization: 'Bearer ' + SLACK_BOT_KEY,
